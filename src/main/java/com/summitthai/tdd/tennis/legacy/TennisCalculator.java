@@ -49,7 +49,19 @@ public class TennisCalculator implements TennisCalculatable {
      */
     private int player2Score = 0;
 
+    /**
+     * This is a flag which identifies if it is a deuce mode or not.
+     *
+     * @since 0.0.1
+     */
     private boolean isDeuceMode = false;
+
+    /**
+     * This is a flag which identifies if it game is ended or not.
+     *
+     * @since 0.0.1
+     */
+    private boolean isGameEnded = false;
 
     /**
      * Get the instance.
@@ -75,6 +87,7 @@ public class TennisCalculator implements TennisCalculatable {
         this.player1Name = player1;
         this.player2Name = player2;
         this.isDeuceMode = false;
+        this.isGameEnded = false;
         this.printScore();
     }
 
@@ -103,6 +116,17 @@ public class TennisCalculator implements TennisCalculatable {
      */
     protected void printScore() {
 
+        if (this.isGameEnded) {
+            System.out.println(
+                "The game between "
+              + this.player1Name
+              + " and "
+              + this.player2Name
+              + " is ended."
+            );
+            return;
+        }
+
         if (this.isDeuceMode) {
             this.printScoreDeuceMode();
             return;
@@ -110,11 +134,13 @@ public class TennisCalculator implements TennisCalculatable {
 
         if (this.player1Score == 4 && this.player2Score < 4) {
             System.out.println(this.player1Name + " WIN !");
+            this.makeTheGameEnd();
             return;
         }
 
         if (this.player2Score == 4 && this.player1Score < 4) {
             System.out.println(this.player2Name + " WIN !");
+            this.makeTheGameEnd();
             return;
         }
 
@@ -167,6 +193,7 @@ public class TennisCalculator implements TennisCalculatable {
                 this.player1Name
               + " WIN ! "
             );
+            this.makeTheGameEnd();
         }
 
         if (this.player2Score == 2 && this.player1Score < 2) {
@@ -174,9 +201,18 @@ public class TennisCalculator implements TennisCalculatable {
                 this.player2Name
               + " WIN ! "
             );
+            this.makeTheGameEnd();
         }
     }
 
+    /**
+     * Convert the score to message.
+     *
+     * @param score
+     *            The converting score
+     * @return The converted message
+     * @since 0.0.1
+     */
     protected String scoreToMessage(final int score) {
         if (score == 0) {
             return "love";
@@ -189,6 +225,16 @@ public class TennisCalculator implements TennisCalculatable {
         } else {
             return "unknown";
         }
+    }
+
+    /**
+     * Make the game to be ended.
+     *
+     * @since 0.0.1
+     */
+    protected void makeTheGameEnd() {
+        this.isGameEnded = true;
+        this.resetScore();
     }
 
 }
