@@ -20,8 +20,18 @@ public class TennisCalculator implements TennisCalculatable {
      */
     private static final long serialVersionUID = 1L;
 
+    /**
+     * This is a player 1 name.
+     *
+     * @since 0.0.1
+     */
     private String player1Name = null;
 
+    /**
+     * This is a player 2 name.
+     *
+     * @since 0.0.1
+     */
     private String player2Name = null;
 
     /**
@@ -38,6 +48,8 @@ public class TennisCalculator implements TennisCalculatable {
      * @since 0.0.1
      */
     private int player2Score = 0;
+
+    private boolean isDeuceMode = false;
 
     /**
      * Get the instance.
@@ -62,6 +74,7 @@ public class TennisCalculator implements TennisCalculatable {
     public void init(final String player1, final String player2) {
         this.player1Name = player1;
         this.player2Name = player2;
+        this.isDeuceMode = false;
         this.printScore();
     }
 
@@ -90,6 +103,11 @@ public class TennisCalculator implements TennisCalculatable {
      */
     protected void printScore() {
 
+        if (this.isDeuceMode) {
+            this.printScoreDeuceMode();
+            return;
+        }
+
         if (this.player1Score == 4 && this.player2Score < 4) {
             System.out.println(this.player1Name + " WIN !");
             return;
@@ -101,7 +119,9 @@ public class TennisCalculator implements TennisCalculatable {
         }
 
         if (this.player1Score == 3 && this.player2Score == 3) {
-            System.out.println("duce");
+            System.out.println("deuce");
+            this.isDeuceMode = true;
+            this.resetScore();
             return;
         }
 
@@ -111,6 +131,50 @@ public class TennisCalculator implements TennisCalculatable {
            + this.player2Name + " "
            + this.scoreToMessage(this.player2Score)
         );
+    }
+
+    /**
+     * Print the current score.
+     *
+     * @since 0.0.1
+     */
+    protected void printScoreDeuceMode() {
+        if (this.player1Score == 1 && this.player2Score == 0) {
+            System.out.println(
+                this.player1Name
+              + " advantage "
+              + this.player2Name
+            );
+        }
+
+        if (this.player2Score == 1 && this.player1Score == 0) {
+            System.out.println(
+                this.player2Name
+              + " advantage "
+              + this.player1Name
+            );
+        }
+
+        if (this.player1Score == this.player2Score) {
+            System.out.println("deuce");
+            this.isDeuceMode = true;
+            this.resetScore();
+            return;
+        }
+
+        if (this.player1Score == 2 && this.player2Score < 2) {
+            System.out.println(
+                this.player1Name
+              + " WIN ! "
+            );
+        }
+
+        if (this.player2Score == 2 && this.player1Score < 2) {
+            System.out.println(
+                this.player2Name
+              + " WIN ! "
+            );
+        }
     }
 
     protected String scoreToMessage(final int score) {
